@@ -8,4 +8,5 @@ Worms is a artillery game created in 1995 by Andy Davidson and Team17, inspired 
 classic video game “Artillery”, by Mike Forman, released in 1976.
 Our reference is Worms 3/Worms Armaggedon
 
-<code>code</code>
+Works on Ubuntu / Archlinux / OpenSUSE / debian
+<code>./install.sh</code>

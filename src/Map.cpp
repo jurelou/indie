@@ -1,0 +1,227 @@
+//
+// Map.cpp for cpp_indie_studio in /Users/eliasdemnati/Repo/Rendu/cpp_indie_studio/src
+// 
+// Made by Elias Demnati
+// Login   <elias.demnati@epitech.net>
+// 
+// Started on  Mon May 22 14:55:05 2017 Elias Demnati
+// Last update Wed Jun 28 13:25:08 2017 louis
+//
+
+#include                              <iostream>
+#include                              <ctime>
+#include                              <random>
+#include                              <algorithm>
+#include                              <SDL/SDL.h>
+#include                              "Map.hpp"
+
+Map::Map(irr::scene::ISceneManager *manager)
+{
+  this->_manager = manager;
+  this->_frq = 4;
+  this->_oct = 5;
+  this->_prs = 0.5;
+  this->_lis = 3;
+  std::cout << "Contructing map" << std::endl;
+}
+
+Map::~Map()
+{
+  std::cout << "Destructing map" << std::endl;
+}
+
+Map::layers                             Map::generateRandomLayer()
+{
+  Map::layers                           s;
+
+  std::srand(std::time(0));
+  for (auto i = 0; i < 256; i++)
+    {
+      for (auto j = 0; j < 256; j++)
+        {
+          s.map[i][j] = std::rand() % 256;
+	}
+    }
+  return (s);
+}
+
+std::array<std::array<int, 256>, 256>   Map::getLayerArray(int currFreq)
+{
+  std::array<std::array<int, 256>, 256> s;
+  int                                   i = 0;
+  int                                   j;
+  
+  for (auto i = 0; i < 256; i++)
+    {
+      for (auto j = 0; j < 256; j++)
+        {
+          s[i][j] = this->interpolValue(i, j, currFreq);
+        }
+    }
+  return (s);
+}
+
+float                                   Map::getTotalPers()
+{
+  float                                 totalPers = 0;
+
+  for (auto it: this->_layers)
+    totalPers += it._pers;
+  return (totalPers);
+}
+
+void                                    Map::calcSuccessiveLayers()
+{
+  float                                 totalPers = this->getTotalPers();
+  int                                   i = 0;
+  int                                   j;
+
+  for (auto i = 0; i < 256; i++)
+    {
+      for (auto j = 0; j < 256; j++)
+        {
+          this->_random.map[i][j] = 0;
+          for (auto itt: this->_layers)
+            this->_random.map[i][j] += itt.map[i][j] * itt._pers;
+          this->_random.map[i][j] = this->_random.map[i][j] / totalPers;
+        }
+    }
+}
+
+int                                     Map::calcInterpol(int y1, int y2, int n, int delta) const
+{
+  float                                 a;
+  float                                 f1;
+  float                                 f2;
+
+  if (n == 0)
+    return (y1);
+  if (n == 1)
+    return (y2);
+  a = (float)delta / n;
+  f1 = 3 * std::pow(1 - a, 2) - 2 * std::pow(1 - a, 3);
+  f2 = 3 * std::pow(a, 2) - 2 * std::pow(a, 3);
+  return (y1 * f1 + y2 * f2);         
+}
+
+int                                     Map::interpolValue(int i, int j, int currFreq) const
+{
+  float                                 step = (float)256 / currFreq;
+  int                                   qx = (float)i / step;
+  int                                   qy = (float)j / step;
+  int                                   x1 = qx * step;
+  int                                   y1 = qy * step;
+  int                                   x2 = (qx + 1) * step >= 256 ? 255 : (qx + 1) * step;
+  int                                   y2 = (qy + 1) * step >= 256 ? 255 : (qy + 1) * step;
+  int                                   b00 = this->_random.map[x1][y1];
+  int                                   b01 = this->_random.map[x1][y2];
+  int                                   b10 = this->_random.map[x2][y1];
+  int                                   b11 = this->_random.map[x2][y2];
+  int                                   v1 = this->calcInterpol(b00, b01, y2 - y1, j - y1);
+  int                                   v2 = this->calcInterpol(b10, b11, y2 - y1, j - y1);
+
+  return (this->calcInterpol(v1, v2, x2 - x1, i - x1)); 
+}
+
+void                                    Map::generateVectorOfLayers()
+{
+  float                                 currPers = this->_prs;
+  int                                   currFreq = this->_frq;
+
+  for (auto it = 0; it < this->_oct; it++)
+    {
+      this->_layers.push_back({this->getLayerArray(currFreq), 256, currPers});
+      currPers *= this->_prs;
+      currFreq *= this->_frq;
+    }
+}
+
+void                                    Map::colorerPixel(SDL_Surface* s, int x, int y, Uint32 coul)
+{
+  *((Uint32*)(s->pixels) + x + y * s->w) = coul;
+}
+
+void                                    Map::saveAsBmp()
+{
+  SDL_Surface                           *s = SDL_CreateRGBSurface(SDL_SWSURFACE,256, 256, 32,0, 0, 0, 0);
+  Uint32                                u;
+  unsigned char				color;
+  unsigned char				delta;
+  SDL_PixelFormat                       *fmt = s->format;
+
+  for (int i = 0; i < 256; i++)
+    {
+      for (int j = 0; j < 256; j++)
+        {
+	  color = (char)this->_random.map[i][j];
+	  if (i < 20 || i >= 236 || j < 20 || j >= 236)
+	    {
+	      delta = 255;
+	      if (j < 20 && (int)delta > j * 5)
+		delta = (char)j * 5;
+	      if (j >= 236 && (int)delta > ((20 - (j - 236)) * 5))
+		delta = ((20 - ((char)j - 236)) * 5);
+	      if (i < 20 && (int)delta > (i * 5))
+		delta = (char)i * 5;
+	      if (i >= 236 && (int)delta > (20 - (i - 236)) * 5)
+		delta = (20 - ((char)i - 236)) * 5;
+	      color = (color * delta) / 100;
+	    }
+          u = SDL_MapRGB(fmt, color, color, color);
+          colorerPixel(s, i, j, u);
+        }
+    }
+  SDL_SaveBMP(s, "map/.randomap.bmp");
+  SDL_FreeSurface(s);
+}
+
+void                                    Map::initBase()
+{
+  this->_random = this->generateRandomLayer();
+  this->generateVectorOfLayers();
+  this->calcSuccessiveLayers();
+}
+
+void                                    Map::generateMap()
+{
+  std::cout << "Begin map generation" << std::endl;
+  this->initBase();
+  this->saveAsBmp();
+  this->loadTerrain("map/.randomap.bmp");
+}
+
+void					Map::loadTerrain(const irr::io::path mapPath)
+{
+  this->_map = _manager->addTerrainSceneNode(mapPath,
+					     0,
+					     -1,
+					     (irr::core::vector3df(0.f, 0.f, 0.f)),
+					     (irr::core::vector3df(0.f, 0.f, 0.f)),
+					     (irr::core::vector3df(70.f, 10.f, 70.f)),
+					     (irr::video::SColor (255, 255, 255, 255)),
+					     5,
+					     irr::scene::ETPS_17,
+					     4);
+
+  if (!(_map))
+    {
+      Device->drop();
+      exit(1);
+    }
+  this->_map->setMaterialFlag(irr::video::EMF_LIGHTING, false);
+  this->_map->setMaterialTexture(0,
+				 Device->getVideoDriver()->getTexture("misc/Ground.jpg"));
+  this->_map->setMaterialTexture(1,
+         Device->getVideoDriver()->getTexture("misc/Sand.jpg"));
+  _map->setMaterialType(irr::video::EMT_DETAIL_MAP);
+  _map->scaleTexture(10.f, 10.f);
+
+  _map->setMaterialType(
+			_map->getMaterial(0).MaterialType == irr::video::EMT_SOLID ?
+			irr::video::EMT_DETAIL_MAP : irr::video::EMT_SOLID);
+}
+
+irr::scene::ITerrainSceneNode*          Map::getMap() const
+{
+  return this->_map;
+}

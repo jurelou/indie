@@ -1,0 +1,3 @@
+/home/louis/github/cpp_indie_studio/CMakeFiles/edit_cache.dir
+/home/louis/github/cpp_indie_studio/CMakeFiles/rebuild_cache.dir
+/home/louis/github/cpp_indie_studio/CMakeFiles/indie_studio.dir

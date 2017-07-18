@@ -1,0 +1,96 @@
+//
+// Win.cpp for indie_project in /home/spring_r/Project/cpp_indie_studio/src/scenes
+// 
+// Made by Springer-Roy Romain
+// Login   <spring_r@epitech.eu>
+// 
+// Started on  Thu Jun 15 13:17:03 2017 Springer-Roy Romain
+// Last update Sun Jun 18 12:27:24 2017 louis
+//
+
+#include	"Win.hpp"
+
+Win::Win()
+{
+  _driver = Device->getVideoDriver();
+  _event = static_cast<Event *>(Device->getEventReceiver());
+  _gui = Device->getGUIEnvironment();
+
+  const irr::core::dimension2du& screenSize = _driver->getScreenSize();
+  _elem = new irr::gui::IGUIElement(
+				    irr::gui::EGUIET_ELEMENT,
+				    _gui,
+				    _gui->getRootGUIElement(),
+				    -1,
+				    irr::core::rect<irr::s32>(0,0,screenSize.Width,screenSize.Height)
+				    );
+  irr::gui::IGUIImage *win = _gui->addImage(irr::core::rect<irr::s32>(
+								      (screenSize.Width / 2) - 250,
+								      screenSize.Height * 0,
+								      (screenSize.Width / 2) + 250,
+								      screenSize.Height * 0 + 500
+								      ),
+					    _elem,
+					    -1,
+					    0);
+  win->setImage(_driver->getTexture("./misc/GUI/winner2.png"));
+  _menu = _gui->addButton(
+			  irr::core::rect<irr::s32>(
+						    (screenSize.Width / 2) - 300,
+						    screenSize.Height * 0.80,
+						    (screenSize.Width / 2) - 100,
+						    screenSize.Height * 0.80 + 75
+						    ),
+			  _elem,
+			  -1,
+			  L""
+			  );
+  _menu->setImage(_driver->getTexture("./misc/GUI/menuoff.jpg"));
+  _menu->setScaleImage();
+  _quit = _gui->addButton(
+			  irr::core::rect<irr::s32>(
+						    (screenSize.Width / 2) + 100,
+						    screenSize.Height * 0.80,
+						    (screenSize.Width / 2) + 300,
+						    screenSize.Height * 0.80 + 75
+),
+			  _elem,
+			  -1,
+			  L""
+			  );
+  _quit->setImage(_driver->getTexture("./misc/GUI/exitoff.jpg"));
+  _quit->setScaleImage();
+  //_play->setUseAlphaChannel(true);
+  _elem->setVisible(false);
+}
+
+Win::~Win()
+{
+}
+
+void				Win::update()
+{
+  std::cout << "WIN" << s td::endl;
+  if (_menu->isPressed())
+    {
+      std::cout << "Go to menu" << std::endl;
+      GInfo._reset = true;
+      WINDOW_STATE = Constants::MAIN_MENU;
+    }
+  else if (_quit->isPressed())
+    {
+      Device->drop();
+      exit(0);
+    }
+}
+
+irr::gui::IGUIEnvironment	*Win::getGui() const
+{ return (_gui); }
+
+void				Win::drawAll()
+{
+  _gui->drawAll();
+}
+
+void				Win::setVisible(bool i)
+{ _elem->setVisible(i); }

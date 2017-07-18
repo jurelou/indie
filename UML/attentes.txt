@@ -1,0 +1,18 @@
+multiplayer
+map random generator
+windows / linux
+victory
+defeat
+intro
+save / load
+score files
+worms
+IA -> Lua
+team color
+time
+multithread
+music / fx
+assets
+installer
+settings
+3D

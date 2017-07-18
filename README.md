@@ -9,4 +9,8 @@ classic video game “Artillery”, by Mike Forman, released in 1976.
 Our reference is Worms 3/Worms Armaggedon
 
 Works on Ubuntu / Archlinux / OpenSUSE / debian
-<code>./install.sh</code>
+<code>
+./install.sh
+</code>
+
+ok

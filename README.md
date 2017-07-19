@@ -14,4 +14,4 @@ Works on Ubuntu / Archlinux / OpenSUSE / debian
 ./install.sh
 </code>
 ![alt text][logo]
-[logo]: https://github.com/jurelou/img/Capture du 2017-07-18 14-58-41.png "Logo Title Text 2"
+[logo]: https://github.com/jurelou/indie/blob/master/img/Capture%20de%20Pr%C3%A9sentationWorms.wmv.png "Logo Title Text 2"

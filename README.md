@@ -15,3 +15,7 @@ Works on Ubuntu / Archlinux / OpenSUSE / debian
 </code>
 
 ![alt text](https://github.com/jurelou/indie/blob/master/img/Capture%20de%20Pr%C3%A9sentationWorms.wmv.png "Logo Title Text 1")
+
+![alt text](https://github.com/jurelou/indie/blob/master/img/Capture%20du%202017-07-18%2014-58-41.png "Logo Title Text 1")
+
+![alt text](https://github.com/jurelou/indie/blob/master/img/Capture%20du%202017-07-18%2015-00-54.png "Logo Title Text 1")

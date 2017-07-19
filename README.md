@@ -13,5 +13,5 @@ Works on Ubuntu / Archlinux / OpenSUSE / debian
 <code>
 ./install.sh
 </code>
-
-ok
+![alt text][logo]
+[logo]: https://github.com/jurelou/img/Capture du 2017-07-18 14-58-41.png "Logo Title Text 2"

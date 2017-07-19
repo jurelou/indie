@@ -19,3 +19,5 @@ Works on Ubuntu / Archlinux / OpenSUSE / debian
 ![alt text](https://github.com/jurelou/indie/blob/master/img/Capture%20du%202017-07-18%2014-58-41.png "Logo Title Text 1")
 
 ![alt text](https://github.com/jurelou/indie/blob/master/img/Capture%20du%202017-07-18%2015-00-54.png "Logo Title Text 1")
+
+![alt text](https://github.com/jurelou/indie/blob/master/img/Capture%20du%202017-07-18%2015-03-51.png "Logo Title Text 1")

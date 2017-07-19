@@ -13,4 +13,5 @@ Works on Ubuntu / Archlinux / OpenSUSE / debian
 <code>
 ./install.sh
 </code>
- ![alt text]( https://github.com/jurelou/indie/blob/master/img/Capture%20de%20Pr%C3%A9sentationWorms.wmv.png "Logo Title Text 1")
+
+![alt text](https://github.com/jurelou/indie/blob/master/img/Capture%20de%20Pr%C3%A9sentationWorms.wmv.png "Logo Title Text 1")
